@@ -36,8 +36,12 @@ router.get('/vipham/:week_id', (req, res) => {
   })
 });
 
-//delete one accord vpm_id
-router.delete('/vipham/:vpm_id', (req, res) => {
+const auth = require('../src/middleware/auth.middleware');
+const authorizeVipham = require('../middlewares/authorizeVipham');
+const requireRole = require('../src/middleware/requireRole');
+
+//delete one accord vpm_id (protected)
+router.delete('/vipham/:vpm_id', auth, authorizeVipham, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -55,8 +59,8 @@ router.delete('/vipham/:vpm_id', (req, res) => {
 
 });
 
-//delete all accord class_id
-router.delete('/viphamall/:class_id', (req, res) => {
+//delete all accord class_id (protected)
+router.delete('/viphamall/:class_id', auth, authorizeVipham, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -73,8 +77,8 @@ router.delete('/viphamall/:class_id', (req, res) => {
   })
 
 });
-//delete all class
-router.delete('/viphamallclass', (req, res) => {
+//delete all class (protected)
+router.delete('/viphamallclass', auth, authorizeVipham, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -92,8 +96,8 @@ router.delete('/viphamallclass', (req, res) => {
 
 });
 
-//post one
-router.post('/vipham', (req, res) => {
+//post one (protected)
+router.post('/vipham', auth, authorizeVipham, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -111,8 +115,8 @@ router.post('/vipham', (req, res) => {
 
 });
 
-//update one
-router.put('/vipham', (req, res) => {
+//update one (protected)
+router.put('/vipham', auth, authorizeVipham, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
