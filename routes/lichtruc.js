@@ -21,8 +21,11 @@ router.get('/lichtruc/:week_id', (req, res) => {
   })
 });
 
-//post one
-router.post('/lichtruc', (req, res) => {
+const auth = require('../src/middleware/auth.middleware');
+const requireRole = require('../src/middleware/requireRole');
+
+//post one (protected)
+router.post('/lichtruc', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -39,8 +42,8 @@ router.post('/lichtruc', (req, res) => {
   })
 });
 
-//update one
-router.put('/lichtruc', (req, res) => {
+//update one (protected)
+router.put('/lichtruc', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -59,8 +62,8 @@ router.put('/lichtruc', (req, res) => {
 
 });
 
-//delete all
-router.delete('/lichtrucall', (req, res) => {
+//delete all (protected)
+router.delete('/lichtrucall', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -77,8 +80,8 @@ router.delete('/lichtrucall', (req, res) => {
 
 });
 
-// delete one
-router.delete('/lichtruc/:class_active', (req, res) => {
+// delete one (protected)
+router.delete('/lichtruc/:class_active', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 

@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { pool } = require("../db/db-config.js");
+const auth = require('../src/middleware/auth.middleware');
+const requireRole = require('../src/middleware/requireRole');
 
-//get all
-router.get('/rules', (req, res) => {
+//get all (admin only)
+router.get('/rules', auth, requireRole('admin'), (req, res) => {
   pool.getConnection(function(err, conn) {
     if (err) {
       console.log(err)
@@ -21,8 +23,8 @@ router.get('/rules', (req, res) => {
   })
 });
 
-//get one
-router.get('/rules/:name_vp_id', (req, res) => {
+//get one (admin only)
+router.get('/rules/:name_vp_id', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -39,8 +41,8 @@ router.get('/rules/:name_vp_id', (req, res) => {
 
 });
 
-//delete one
-router.delete('/rules/:name_vp_id', (req, res) => {
+//delete one (protected)
+router.delete('/rules/:name_vp_id', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -58,8 +60,8 @@ router.delete('/rules/:name_vp_id', (req, res) => {
 
 });
 
-//post one
-router.post('/rules', (req, res) => {
+//post one (protected)
+router.post('/rules', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -77,8 +79,8 @@ router.post('/rules', (req, res) => {
 
 });
 
-//update one
-router.put('/rules', (req, res) => {
+//update one (protected)
+router.put('/rules', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 

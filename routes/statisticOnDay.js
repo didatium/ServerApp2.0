@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { pool } = require("../db/db-config.js");
+const auth = require('../src/middleware/auth.middleware');
+const requireRole = require('../src/middleware/requireRole');
 
 //get all day all class in a week
 router.get('/statisticOnDay/:week_id', (req, res) => {
@@ -36,8 +38,8 @@ router.get('/statisticOnDay/:class_id', (req, res) => {
   })
 });
 
-//delete everything
-router.delete('/statisticOnDayAll', (req, res) => {
+//delete everything (protected)
+router.delete('/statisticOnDayAll', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -52,8 +54,8 @@ router.delete('/statisticOnDayAll', (req, res) => {
   })
 });
 
-//delete one class
-router.delete('/statisticOnDay/:class_id', (req, res) => {
+//delete one class (protected)
+router.delete('/statisticOnDay/:class_id', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -68,8 +70,8 @@ router.delete('/statisticOnDay/:class_id', (req, res) => {
   })
 });
 
-//post one
-router.post('/statisticOnDay', (req, res) => {
+//post one (protected)
+router.post('/statisticOnDay', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -87,7 +89,7 @@ router.post('/statisticOnDay', (req, res) => {
 
 });
 
-router.put('/statisticOnDay', (req, res) => {
+router.put('/statisticOnDay', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 

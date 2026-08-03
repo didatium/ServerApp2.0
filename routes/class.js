@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { pool } = require("../db/db-config.js");
+const auth = require('../src/middleware/auth.middleware');
+const requireRole = require('../src/middleware/requireRole');
 
-// Create new class table
-router.post('/newclass', (req, res) => {
+// Create new class table (protected)
+router.post('/newclass', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -21,7 +23,7 @@ router.post('/newclass', (req, res) => {
 
 });
 
-//get all
+//get all (public)
 router.get('/class', (req, res) => {
   pool.getConnection(function(err, conn) {
     if (err) {
@@ -40,7 +42,7 @@ router.get('/class', (req, res) => {
   })
 });
 
-//get one
+//get one (public)
 router.get('/class/:class_id', (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
@@ -58,8 +60,8 @@ router.get('/class/:class_id', (req, res) => {
 
 });
 
-//delete one
-router.delete('/class/:class_id', (req, res) => {
+//delete one (protected)
+router.delete('/class/:class_id', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -76,8 +78,8 @@ router.delete('/class/:class_id', (req, res) => {
 
 });
 
-//delete all
-router.delete('/classall', (req, res) => {
+//delete all (protected)
+router.delete('/classall', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -94,8 +96,8 @@ router.delete('/classall', (req, res) => {
 
 });
 
-//post one
-router.post('/class', (req, res) => {
+//post one (protected)
+router.post('/class', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -113,8 +115,8 @@ router.post('/class', (req, res) => {
 
 });
 
-//update one
-router.put('/class', (req, res) => {
+//update one (protected)
+router.put('/class', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 

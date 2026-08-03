@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { pool } = require("../db/db-config.js");
+const auth = require('../src/middleware/auth.middleware');
+const requireRole = require('../src/middleware/requireRole');
+const authorizeScore = require('../middlewares/authorizeScore');
 
 //get all
 router.get('/score/:week_id', (req, res) => {
@@ -39,8 +42,8 @@ router.get('/scoreallweek', (req, res) => {
   })
 });
 
-//delete one accord class_id
-router.delete('/score/:class_id', (req, res) => {
+//delete one accord class_id (protected)
+router.delete('/score/:class_id', auth, authorizeScore, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -57,8 +60,8 @@ router.delete('/score/:class_id', (req, res) => {
 
 });
 
-//delete all
-router.delete('/scoreall', (req, res) => {
+//delete all (protected - admin only)
+router.delete('/scoreall', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -75,8 +78,8 @@ router.delete('/scoreall', (req, res) => {
 
 });
 
-//post one
-router.post('/score', (req, res) => {
+//post one (protected)
+router.post('/score', auth, authorizeScore, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -94,8 +97,8 @@ router.post('/score', (req, res) => {
 
 });
 
-//update one score
-router.put('/score', (req, res) => {
+//update one score (protected)
+router.put('/score', auth, authorizeScore, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -114,8 +117,8 @@ router.put('/score', (req, res) => {
 
 });
 
-//update one note
-router.put('/scorenote', (req, res) => {
+//update one note (protected)
+router.put('/scorenote', auth, authorizeScore, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -134,8 +137,8 @@ router.put('/scorenote', (req, res) => {
 
 });
 
-//update one default
-router.put('/scoredef', (req, res) => {
+//update one default (protected)
+router.put('/scoredef', auth, authorizeScore, (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 

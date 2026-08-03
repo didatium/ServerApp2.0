@@ -21,7 +21,10 @@ router.get('/week', (req, res) => {
   })
 });
 
-router.post('/week', (req, res) => {
+const auth = require('../src/middleware/auth.middleware');
+const requireRole = require('../src/middleware/requireRole');
+
+router.post('/week', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -39,8 +42,8 @@ router.post('/week', (req, res) => {
 
 });
 
-//update one
-router.put('/week', (req, res) => {
+//update one (protected)
+router.put('/week', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 

@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { pool } = require("../db/db-config.js");
+const requireRole = require('../src/middleware/requireRole');
+const auth = require('../src/middleware/auth.middleware');
 
-//get all
-router.get('/userall', (req, res) => {
+//get all (admin only)
+router.get('/userall', auth, requireRole('admin'), (req, res) => {
   pool.getConnection(function(err, conn) {
     if (err) {console.log(err)}
 
@@ -19,8 +21,8 @@ router.get('/userall', (req, res) => {
   })
 });
 
-//get execpt admin
-router.get('/user', (req, res) => {
+//get execpt admin (admin only)
+router.get('/user', auth, requireRole('admin'), (req, res) => {
   pool.getConnection(function(err, conn) {
     if (err) {console.log(err)}
 
@@ -36,8 +38,8 @@ router.get('/user', (req, res) => {
   })
 });
 
-//get one
-router.get('/user/:user_id', (req, res) => {
+//get one (admin only)
+router.get('/user/:user_id', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -54,8 +56,8 @@ router.get('/user/:user_id', (req, res) => {
 
 });
 
-//delete one
-router.delete('/user/:user_id', (req, res) => {
+//delete one (protected)
+router.delete('/user/:user_id', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -70,8 +72,8 @@ router.delete('/user/:user_id', (req, res) => {
   })
 });
 
-//delete all
-router.delete('/userall', (req, res) => {
+//delete all (protected)
+router.delete('/userall', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -86,8 +88,8 @@ router.delete('/userall', (req, res) => {
   })
 });
 
-//post one
-router.post('/user', (req, res) => {
+//post one (protected)
+router.post('/user', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
@@ -105,8 +107,8 @@ router.post('/user', (req, res) => {
 
 });
 
-//update one
-router.put('/user', (req, res) => {
+//update one (protected)
+router.put('/user', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
