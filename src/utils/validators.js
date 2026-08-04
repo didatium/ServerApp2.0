@@ -55,14 +55,14 @@ const updateClassSchema = Joi.object({
 const createUserSchema = Joi.object({
   user_id: userIdSchema.required(),
   password: passwordSchema.required(),
-  user_role: userRoleSchema.required(),
+  user_name: userRoleSchema.required(),
   user_class: userClassSchema.allow(null),
   role: roleSchema.allow(null),
   grade_scope: gradeSchema.allow(null)
 }).unknown(false);
 const updateUserSchema = Joi.object({
   password: passwordSchema,
-  user_role: userRoleSchema,
+  user_name: userRoleSchema,
   user_class: userClassSchema.allow(null),
   role: roleSchema.allow(null),
   grade_scope: gradeSchema.allow(null)

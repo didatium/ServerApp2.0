@@ -8,13 +8,12 @@ router.get('/feedback', (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('Select * from Feedback', (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send(result)
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
   })
 });
 
@@ -26,13 +25,12 @@ router.post('/feedback', (req, res) => {
     const params = req.body;
 
     conn.query('INSERT INTO Feedback SET ?', params, (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
   })
 });
 

@@ -8,11 +8,9 @@ const authorizeScore = require('../middlewares/authorizeScore');
 //get all
 router.get('/score/:week_id', (req, res) => {
   pool.getConnection(function(err, conn) {
-    if (err) {
-      console.log(err)
-    }
 
     conn.query('select * from Score where week_id = ?', [req.params.week_id], (err, result) => {
+      conn.release()
       if (err) {
         console.log(err)
         return
@@ -20,7 +18,6 @@ router.get('/score/:week_id', (req, res) => {
       res.send(result)
     });
 
-    pool.releaseConnection(conn);
   })
 });
 
@@ -31,6 +28,7 @@ router.get('/scoreallweek', (req, res) => {
     }
 
     conn.query('select * from Score', (err, result) => {
+      conn.release()
       if (err) {
         console.log(err)
         return
@@ -38,7 +36,6 @@ router.get('/scoreallweek', (req, res) => {
       res.send(result)
     });
 
-    pool.releaseConnection(conn);
   })
 });
 
@@ -48,14 +45,13 @@ router.delete('/score/:class_id', auth, authorizeScore, (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('DELETE from Score where class_id = ?', [req.params.class_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted item!")
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
@@ -66,14 +62,13 @@ router.delete('/scoreall', auth, requireRole('admin'), (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('DELETE from Score', (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted all item!")
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
@@ -86,13 +81,13 @@ router.post('/score', auth, authorizeScore, (req, res) => {
     const params = req.body;
 
     conn.query('INSERT INTO Score VALUES ?', [params.map(item => [item.week_id, item.class_id, item.score, item.deft, item.note])], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+
   })
 
 });
@@ -106,13 +101,13 @@ router.put('/score', auth, authorizeScore, (req, res) => {
 
     //update name column
     conn.query('UPDATE Score SET score = ? WHERE week_id = ? and class_id = ?', [score, week_id, class_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+
   })
 
 });
@@ -126,13 +121,13 @@ router.put('/scorenote', auth, authorizeScore, (req, res) => {
 
     //update name column
     conn.query('UPDATE Score SET note = ? WHERE week_id = ? and class_id = ?', [note, week_id, class_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+
   })
 
 });
@@ -146,13 +141,13 @@ router.put('/scoredef', auth, authorizeScore, (req, res) => {
 
     //update name column
     conn.query('UPDATE Score SET deft = ? WHERE week_id = ? and class_id = ?', [deft, week_id, class_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+
   })
 
 });

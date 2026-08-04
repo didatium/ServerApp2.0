@@ -36,14 +36,14 @@ const vipham = require('./routes/vipham.js');
 const statisticOnDay = require('./routes/statisticOnDay.js');
 const student = require('./routes/student.js');
 const auth = require('./routes/auth.js');
+const sodaubai = require('./routes/sodaubai.js');
 const authMiddleware = require('./src/middleware/auth.middleware');
 
-//use Route
-app.use(auth); // login route - public
-app.use(feedback); // feedback remains public as requested
-app.use(vipham); // Vipham GET remains public; POST/PUT/DELETE still protect via route-level auth
-
-// (No global auth) mount remaining routes; each route file uses route-level auth where needed
+//use Route - using route-level auth
+app.use(auth);
+app.use(feedback);
+app.use(vipham);
+app.use(sodaubai);
 app.use(users);
 app.use(classs);
 app.use(rules);

@@ -10,6 +10,7 @@ router.get('/week', (req, res) => {
     }
 
     conn.query('Select * From Week', (err, result) => {
+      conn.release()
       if (err) {
         console.log(err)
         return
@@ -17,7 +18,6 @@ router.get('/week', (req, res) => {
       res.send(result)
     });
 
-    pool.releaseConnection(conn);
   })
 });
 
@@ -31,13 +31,13 @@ router.post('/week', auth, requireRole('admin'), (req, res) => {
     const params = req.body;
 
     conn.query('INSERT INTO Week SET ?', params, (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+    
   })
 
 });
@@ -50,13 +50,13 @@ router.put('/week', auth, requireRole('admin'), (req, res) => {
     const { week_id, start_date, end_date } = req.body;
     //update name column
     conn.query('UPDATE Week SET start_date = ?, end_date = ? WHERE week_id = ?', [start_date, end_date, week_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+    
   })
 
 });

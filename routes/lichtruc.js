@@ -10,6 +10,7 @@ router.get('/lichtruc/:week_id', (req, res) => {
     }
 
     conn.query('select * from Lichtruc where week_id = ?', [req.params.week_id], (err, result) => {
+      conn.release()
       if (err) {
         console.log(err)
         return
@@ -17,7 +18,6 @@ router.get('/lichtruc/:week_id', (req, res) => {
       res.send(result)
     });
 
-    pool.releaseConnection(conn);
   })
 });
 
@@ -32,13 +32,13 @@ router.post('/lichtruc', auth, requireRole('admin'), (req, res) => {
     const params = req.body;
 
     conn.query('INSERT INTO Lichtruc VALUES ?', [params.map(item => [item.week_id, item.class_active, item.class_passive])], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+    
   })
 });
 
@@ -51,13 +51,13 @@ router.put('/lichtruc', auth, requireRole('admin'), (req, res) => {
 
     //update name column
     conn.query("UPDATE Lichtruc SET class_passive = ? WHERE week_id = ? and class_active = ? ", [class_passive, week_id, class_active], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+    
   })
 
 });
@@ -68,14 +68,13 @@ router.delete('/lichtrucall', auth, requireRole('admin'), (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('DELETE from Lichtruc', (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted all item!")
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
@@ -86,14 +85,13 @@ router.delete('/lichtruc/:class_active', auth, requireRole('admin'), (req, res) 
     if (err) { console.log(err) }
 
     conn.query('DELETE from Lichtruc where class_active = ?', [req.params.class_active], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted item!")
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 
 });

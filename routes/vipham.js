@@ -8,14 +8,13 @@ router.get('/vipham/:class_id/:week_id', (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('select * from Vipham where class_id = ? and week_id = ?', [req.params.class_id, req.params.week_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send(result)
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 });
 
@@ -25,14 +24,13 @@ router.get('/vipham/:week_id', (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('select * from Vipham where week_id = ?', [req.params.week_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send(result)
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 });
 
@@ -46,7 +44,7 @@ router.delete('/vipham/:vpm_id', auth, authorizeVipham, (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('DELETE from Vipham where vpm_id = ?', [req.params.vpm_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted item!")
       } else {
@@ -54,18 +52,17 @@ router.delete('/vipham/:vpm_id', auth, authorizeVipham, (req, res) => {
       }
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
 
 //delete all accord class_id (protected)
-router.delete('/viphamall/:class_id', auth, authorizeVipham, (req, res) => {
+router.delete('/viphamall/:class_id', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
     conn.query('DELETE from Vipham where class_id = ?', [req.params.class_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted all item!")
       } else {
@@ -73,17 +70,16 @@ router.delete('/viphamall/:class_id', auth, authorizeVipham, (req, res) => {
       }
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
 //delete all class (protected)
-router.delete('/viphamallclass', auth, authorizeVipham, (req, res) => {
+router.delete('/viphamallclass', auth, requireRole('admin'), (req, res) => {
   pool.getConnection((err, conn) => {
     if (err) { console.log(err) }
 
     conn.query('DELETE from Vipham', (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted all item!")
       } else {
@@ -91,7 +87,6 @@ router.delete('/viphamallclass', auth, authorizeVipham, (req, res) => {
       }
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
@@ -104,13 +99,13 @@ router.post('/vipham', auth, authorizeVipham, (req, res) => {
     const params = req.body;
 
     conn.query('INSERT INTO Vipham SET ?', params, (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
+    
   })
 
 });
@@ -125,19 +120,21 @@ router.put('/vipham', auth, authorizeVipham, (req, res) => {
     //update name column
     if (bonus == null) {
       conn.query('UPDATE Vipham SET name_vp_id = ?, quantity = ?, modified_by = ?, name_student = ?, day = ? WHERE vpm_id = ?', [name_vp_id, quantity, modified_by, name_student, day, vpm_id], (err, result) => {
+        conn.release()
         if (!err) {
           res.send("Inserted item!")
         } else { console.log(err); }
       });
     } else {
-      conn.query('UPDATE Vipham SET name_student = ?, quantity = ?, create_by = ?, day = ? WHERE bonus = ? and week_id = ? and class_id = ? ', [name_student, quantity, create_by, day, bonus, week_id, class_id], (err, result) => {
+      // update bonus
+      conn.query('UPDATE Vipham SET bonus = ?, quantity = ?, create_by = ?, day = ? WHERE vpm_id ? ', [bonus, quantity, create_by, day, vpm_id], (err, result) => {
+        conn.release()
         if (!err) {
           res.send("Inserted bonus!")
         } else { console.log(err); }
       });
     }
 
-    pool.releaseConnection(conn)
   })
 
 });

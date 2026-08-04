@@ -12,13 +12,12 @@ router.post('/newclass', auth, requireRole('admin'), (req, res) => {
     const { newClass } = req.body;
 
     conn.query('CREATE TABLE IF NOT EXISTS ? (`hs_id` varchar(6) Primary key,`hs_name` varchar(100),`hs_vpm` varchar(1000))', [newClass], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Created new class!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
   })
 
 });
@@ -31,6 +30,7 @@ router.get('/class', (req, res) => {
     }
 
     conn.query('select * from Class', (err, result) => {
+      conn.release()
       if (err) {
         console.log(err)
         return
@@ -38,7 +38,6 @@ router.get('/class', (req, res) => {
       res.send(result)
     });
 
-    pool.releaseConnection(conn);
   })
 });
 
@@ -48,14 +47,13 @@ router.get('/class/:class_id', (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('SELECT * from Class where class_id = ?', [req.params.class_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send(result)
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
@@ -66,14 +64,13 @@ router.delete('/class/:class_id', auth, requireRole('admin'), (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('DELETE from Class where class_id = ?', [req.params.class_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted item!")
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
@@ -84,14 +81,13 @@ router.delete('/classall', auth, requireRole('admin'), (req, res) => {
     if (err) { console.log(err) }
 
     conn.query('DELETE from Class', (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Deleted item!")
       } else { console.log(err) }
 
     });
 
-    pool.releaseConnection(conn)
   })
 
 });
@@ -104,13 +100,12 @@ router.post('/class', auth, requireRole('admin'), (req, res) => {
     const params = req.body;
 
     conn.query('INSERT INTO Class SET ?', params, (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
   })
 
 });
@@ -124,13 +119,12 @@ router.put('/class', auth, requireRole('admin'), (req, res) => {
 
     //update name column
     conn.query('UPDATE Class SET class_name = ?, gvcn_id = ? WHERE class_id = ?', [class_name, class_id, gvcn_id], (err, result) => {
-
+      conn.release()
       if (!err) {
         res.send("Inserted item!")
       } else { console.log(err); }
 
     });
-    pool.releaseConnection(conn)
   })
 
 });
