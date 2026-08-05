@@ -35,9 +35,8 @@ async function createStudent(req, res, next) {
 
 async function updateStudent(req, res, next) {
   try {
-    const payload = updateStudentValidator(req.body);
-    const { student_id } = req.params;
-    const student = await studentService.updateStudent(student_id, payload);
+    const params = updateStudentValidator(req.body);
+    const student = await studentService.updateStudent(params);
     if (!student) {
       return res.status(404).json({ success: false, message: 'Student not found' });
     }

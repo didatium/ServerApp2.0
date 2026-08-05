@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { pool } = require("../db/db-config.js");
+const { pool } = require("../src/db/pool.js")
 
 //get all
 router.get('/feedback', (req, res) => {

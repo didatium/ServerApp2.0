@@ -1,99 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const { pool } = require("../db/db-config.js");
+const LichtrucController = require('../src/controllers/lichtrucController')
+const requireRole = require('../src/middleware/requireRole');
+const auth = require('../src/middleware/auth.middleware');
 
 //get one week
-router.get('/lichtruc/:week_id', (req, res) => {
-  pool.getConnection(function(err, conn) {
-    if (err) {
-      console.log(err)
-    }
-
-    conn.query('select * from Lichtruc where week_id = ?', [req.params.week_id], (err, result) => {
-      conn.release()
-      if (err) {
-        console.log(err)
-        return
-      };
-      res.send(result)
-    });
-
-  })
-});
-
-const auth = require('../src/middleware/auth.middleware');
-const requireRole = require('../src/middleware/requireRole');
+router.get('/lichtruc/:week_id', LichtrucController.listLichtrucByWeek)
 
 //post one (protected)
-router.post('/lichtruc', auth, requireRole('admin'), (req, res) => {
-  pool.getConnection((err, conn) => {
-    if (err) { console.log(err) }
-
-    const params = req.body;
-
-    conn.query('INSERT INTO Lichtruc VALUES ?', [params.map(item => [item.week_id, item.class_active, item.class_passive])], (err, result) => {
-      conn.release()
-      if (!err) {
-        res.send("Inserted item!")
-      } else { console.log(err); }
-
-    });
-    
-  })
-});
+router.post('/lichtruc', auth, requireRole('admin'), LichtrucController.createLichtruc)
 
 //update one (protected)
-router.put('/lichtruc', auth, requireRole('admin'), (req, res) => {
-  pool.getConnection((err, conn) => {
-    if (err) { console.log(err) }
-
-    const { week_id, class_active, class_passive } = req.body;
-
-    //update name column
-    conn.query("UPDATE Lichtruc SET class_passive = ? WHERE week_id = ? and class_active = ? ", [class_passive, week_id, class_active], (err, result) => {
-      conn.release()
-      if (!err) {
-        res.send("Inserted item!")
-      } else { console.log(err); }
-
-    });
-    
-  })
-
-});
-
-//delete all (protected)
-router.delete('/lichtrucall', auth, requireRole('admin'), (req, res) => {
-  pool.getConnection((err, conn) => {
-    if (err) { console.log(err) }
-
-    conn.query('DELETE from Lichtruc', (err, result) => {
-      conn.release()
-      if (!err) {
-        res.send("Deleted all item!")
-      } else { console.log(err) }
-
-    });
-
-  })
-
-});
+router.put('/lichtruc', auth, requireRole('admin'), LichtrucController.updateLichtruc)
 
 // delete one (protected)
-router.delete('/lichtruc/:class_active', auth, requireRole('admin'), (req, res) => {
-  pool.getConnection((err, conn) => {
-    if (err) { console.log(err) }
-
-    conn.query('DELETE from Lichtruc where class_active = ?', [req.params.class_active], (err, result) => {
-      conn.release()
-      if (!err) {
-        res.send("Deleted item!")
-      } else { console.log(err) }
-
-    });
-
-  })
-
-});
+router.delete('/lichtruc/:class_active', auth, requireRole('admin'), LichtrucController.deleteLichtrucByClass)
 
 module.exports = router;

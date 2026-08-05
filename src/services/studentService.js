@@ -12,8 +12,8 @@ async function createStudent(studentPayload) {
   return studentRepository.createStudent(studentPayload);
 }
 
-async function updateStudent(studentId, studentPayload) {
-  return studentRepository.updateStudent(studentId, studentPayload);
+async function updateStudent(studentPayload) {
+  return studentRepository.updateStudent(studentPayload);
 }
 
 async function removeStudent(studentId) {
