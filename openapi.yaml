@@ -1,0 +1,1751 @@
+openapi: 3.0.3
+info:
+  title: CMM Backend API
+  version: 1.0.0
+  description: |
+    API contract for the CMM backend. Frontend clients must include the API key header `api-key` on every request.
+    Protected endpoints also require JWT bearer authentication with the token returned by `/login`.
+servers:
+  - url: http://localhost:3000
+security:
+  - ApiKeyAuth: []
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: api-key
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+    LoginRequest:
+      type: object
+      required:
+        - user_name
+        - password
+      properties:
+        user_name:
+          type: string
+          example: ur-adm
+        password:
+          type: string
+          format: password
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserSummary'
+    UserSummary:
+      type: object
+      properties:
+        user_id:
+          type: string
+        user_name:
+          type: string
+        role:
+          type: string
+        user_class:
+          type: string
+          nullable: true
+        grade_scope:
+          type: integer
+          nullable: true
+    CreateUserRequest:
+      type: object
+      required:
+        - user_id
+        - password
+        - user_name
+      properties:
+        user_id:
+          type: string
+        password:
+          type: string
+          format: password
+        user_name:
+          type: string
+        user_class:
+          type: string
+          nullable: true
+        role:
+          type: string
+          nullable: true
+        grade_scope:
+          type: integer
+          nullable: true
+    UpdateUserRequest:
+      type: object
+      required:
+        - user_id
+      properties:
+        user_id:
+          type: string
+        password:
+          type: string
+          format: password
+        user_name:
+          type: string
+        user_class:
+          type: string
+          nullable: true
+        role:
+          type: string
+        grade_scope:
+          type: integer
+          nullable: true
+    UpdateOwnProfileRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          format: password
+        user_class:
+          type: string
+          nullable: true
+    ClassSummary:
+      type: object
+      properties:
+        class_id:
+          type: string
+        class_name:
+          type: string
+        grade:
+          type: integer
+    CreateClassRequest:
+      type: object
+      required:
+        - class_id
+        - class_name
+      properties:
+        class_id:
+          type: string
+        class_name:
+          type: string
+        grade:
+          type: integer
+    UpdateClassRequest:
+      type: object
+      required:
+        - class_id
+        - class_name
+      properties:
+        class_id:
+          type: string
+        class_name:
+          type: string
+        grade:
+          type: integer
+    CreateWeekRequest:
+      type: object
+      required:
+        - week_id
+        - week_name
+      properties:
+        week_id:
+          type: string
+        week_name:
+          type: string
+        start_date:
+          type: string
+          nullable: true
+        end_date:
+          type: string
+          nullable: true
+    UpdateWeekRequest:
+      type: object
+      required:
+        - week_id
+      properties:
+        week_id:
+          type: string
+        week_name:
+          type: string
+        start_date:
+          type: string
+          nullable: true
+        end_date:
+          type: string
+          nullable: true
+    RuleSummary:
+      type: object
+      properties:
+        name_vp_id:
+          type: integer
+        name_vp:
+          type: string
+        minus_pnt:
+          type: integer
+        type:
+          type: string
+          nullable: true
+    CreateRuleRequest:
+      type: object
+      required:
+        - name_vp
+        - minus_pnt
+      properties:
+        name_vp:
+          type: string
+        minus_pnt:
+          type: integer
+        type:
+          type: string
+          nullable: true
+    UpdateRuleRequest:
+      type: object
+      properties:
+        name_vp:
+          type: string
+        minus_pnt:
+          type: integer
+        type:
+          type: string
+          nullable: true
+    ViphamSummary:
+      type: object
+      properties:
+        vpm_id:
+          type: integer
+        week_id:
+          type: string
+        class_id:
+          type: string
+        name_vp_id:
+          type: integer
+          nullable: true
+        quantity:
+          type: integer
+        student_id:
+          type: string
+          nullable: true
+        name_student:
+          type: string
+          nullable: true
+        create_by:
+          type: string
+        create_at:
+          type: string
+          format: date-time
+        bonus:
+          type: string
+          nullable: true
+        modified_by:
+          type: string
+          nullable: true
+        day:
+          type: integer
+          nullable: true
+    CreateViphamRequest:
+      type: object
+      required:
+        - week_id
+        - class_id
+        - quantity
+        - create_by
+      properties:
+        week_id:
+          type: string
+        class_id:
+          type: string
+        name_vp_id:
+          type: integer
+          nullable: true
+        quantity:
+          type: integer
+        student_id:
+          type: string
+          nullable: true
+        name_student:
+          type: string
+          nullable: true
+        create_by:
+          type: string
+        bonus:
+          type: string
+          nullable: true
+        modified_by:
+          type: string
+          nullable: true
+        day:
+          type: integer
+          nullable: true
+    UpdateViphamRequest:
+      type: object
+      properties:
+        name_vp_id:
+          type: integer
+          nullable: true
+        quantity:
+          type: integer
+        student_id:
+          type: string
+          nullable: true
+        name_student:
+          type: string
+          nullable: true
+        modified_by:
+          type: string
+          nullable: true
+        bonus:
+          type: string
+          nullable: true
+        day:
+          type: integer
+          nullable: true
+    ScoreSummary:
+      type: object
+      properties:
+        week_id:
+          type: string
+        class_id:
+          type: string
+        score:
+          type: integer
+        deft:
+          type: integer
+          nullable: true
+        note:
+          type: string
+          nullable: true
+    ScoreCreateItem:
+      type: object
+      required:
+        - week_id
+        - class_id
+        - score
+      properties:
+        week_id:
+          type: string
+        class_id:
+          type: string
+        score:
+          type: integer
+        deft:
+          type: integer
+          nullable: true
+        note:
+          type: string
+          nullable: true
+    CreateScoreRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/ScoreCreateItem'
+    UpdateScoreRequest:
+      type: object
+      properties:
+        score:
+          type: integer
+        week_id:
+          type: string
+        class_id:
+          type: string
+    UpdateScoreNoteRequest:
+      type: object
+      properties:
+        note:
+          type: string
+          nullable: true
+        week_id:
+          type: string
+        class_id:
+          type: string
+    UpdateScoreDeftRequest:
+      type: object
+      properties:
+        deft:
+          type: integer
+        week_id:
+          type: string
+        class_id:
+          type: string
+    LichtrucSummary:
+      type: object
+      properties:
+        week_id:
+          type: string
+        class_active:
+          type: string
+        class_passive:
+          type: string
+          nullable: true
+    CreateLichtrucRequest:
+      type: object
+      required:
+        - week_id
+        - class_active
+      properties:
+        week_id:
+          type: string
+        class_active:
+          type: string
+        class_passive:
+          type: string
+          nullable: true
+    UpdateLichtrucRequest:
+      type: object
+      properties:
+        class_passive:
+          type: string
+          nullable: true
+    FeedbackSummary:
+      type: object
+      properties:
+        fbk_id:
+          type: integer
+        name:
+          type: string
+        sdt:
+          type: string
+        address:
+          type: string
+          nullable: true
+        feed:
+          type: string
+          nullable: true
+        school:
+          type: string
+          nullable: true
+    CreateFeedbackRequest:
+      type: object
+      required:
+        - name
+        - sdt
+      properties:
+        name:
+          type: string
+        sdt:
+          type: string
+        address:
+          type: string
+          nullable: true
+        feed:
+          type: string
+          nullable: true
+        school:
+          type: string
+          nullable: true
+    StudentSummary:
+      type: object
+      properties:
+        student_id:
+          type: string
+        student_name:
+          type: string
+        class_id:
+          type: string
+    CreateStudentRequest:
+      type: object
+      required:
+        - student_name
+        - class_id
+      properties:
+        student_id:
+          type: string
+          nullable: true
+        student_name:
+          type: string
+        class_id:
+          type: string
+    UpdateStudentRequest:
+      type: object
+      properties:
+        student_name:
+          type: string
+        class_id:
+          type: string
+    SoDauBaiSummary:
+      type: object
+      properties:
+        record_id:
+          type: integer
+        week_id:
+          type: string
+        class_id:
+          type: string
+        periods_data:
+          type: object
+        quantity:
+          type: integer
+        create_by:
+          type: string
+        create_at:
+          type: string
+          format: date-time
+        modified_by:
+          type: string
+          nullable: true
+    CreateSoDauBaiRequest:
+      type: object
+      required:
+        - week_id
+        - class_id
+        - periods_data
+        - quantity
+        - create_by
+      properties:
+        week_id:
+          type: string
+        class_id:
+          type: string
+        periods_data:
+          type: object
+        quantity:
+          type: integer
+        create_by:
+          type: string
+        create_at:
+          type: string
+          format: date-time
+          nullable: true
+        modified_by:
+          type: string
+          nullable: true
+    UpdateSoDauBaiRequest:
+      type: object
+      properties:
+        week_id:
+          type: string
+        class_id:
+          type: string
+        periods_data:
+          type: object
+        quantity:
+          type: integer
+        create_by:
+          type: string
+        create_at:
+          type: string
+          format: date-time
+        modified_by:
+          type: string
+          nullable: true
+paths:
+  /:
+    get:
+      summary: Health check
+      description: Returns a basic status message.
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+  /login:
+    post:
+      summary: Authenticate user
+      description: Returns a JWT and user summary. Uses user_name + password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+  /feedback:
+    get:
+      summary: Retrieve all feedback entries
+      responses:
+        '200':
+          description: Feedback list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeedbackSummary'
+    post:
+      summary: Submit feedback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFeedbackRequest'
+      responses:
+        '200':
+          description: Feedback created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    security:
+      - ApiKeyAuth: []
+  /newclass:
+    post:
+      summary: Create a new class table by dynamic name
+      description: Protected admin-only route that creates a new per-class table. Use with caution.
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - newClass
+              properties:
+                newClass:
+                  type: string
+      responses:
+        '201':
+          description: Created new class table
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /class:
+    get:
+      summary: List all classes
+      responses:
+        '200':
+          description: Class list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClassSummary'
+    post:
+      summary: Create a class
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClassRequest'
+      responses:
+        '201':
+          description: Class created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ClassSummary'
+    put:
+      summary: Update a class
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClassRequest'
+      responses:
+        '200':
+          description: Class updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ClassSummary'
+  /class/{class_id}:
+    get:
+      summary: Retrieve a class by ID
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Class retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ClassSummary'
+    delete:
+      summary: Delete a class
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Class deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /classall:
+    delete:
+      summary: Delete all classes
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Deleted all classes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /week:
+    get:
+      summary: List all weeks
+      responses:
+        '200':
+          description: Week list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        week_id:
+                          type: string
+                        week_name:
+                          type: string
+                        start_date:
+                          type: string
+                          nullable: true
+                        end_date:
+                          type: string
+                          nullable: true
+    post:
+      summary: Create a week
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWeekRequest'
+      responses:
+        '201':
+          description: Week created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+    put:
+      summary: Update a week
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWeekRequest'
+      responses:
+        '200':
+          description: Week updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+  /rules:
+    get:
+      summary: List all rules
+      responses:
+        '200':
+          description: Rules list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RuleSummary'
+    post:
+      summary: Create a new violation rule
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRuleRequest'
+      responses:
+        '201':
+          description: Rule created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/RuleSummary'
+    put:
+      summary: Update a violation rule
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRuleRequest'
+      responses:
+        '200':
+          description: Rule updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/RuleSummary'
+  /rules/{name_vp_id}:
+    get:
+      summary: Get a rule by ID
+      parameters:
+        - name: name_vp_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Rule retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/RuleSummary'
+    delete:
+      summary: Delete a rule by ID
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: name_vp_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Rule deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /lichtruc:
+    post:
+      summary: Create duty assignment
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLichtrucRequest'
+      responses:
+        '201':
+          description: Duty assignment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/LichtrucSummary'
+    put:
+      summary: Update a duty assignment
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLichtrucRequest'
+      responses:
+        '200':
+          description: Duty assignment updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/LichtrucSummary'
+  /lichtruc/{week_id}:
+    get:
+      summary: List duty assignments for a week
+      parameters:
+        - name: week_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Duty list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LichtrucSummary'
+  /lichtruc/{class_active}:
+    delete:
+      summary: Delete duty assignments for an active class
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: class_active
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Duty assignments deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /score/{week_id}:
+    get:
+      summary: Get score by week
+      parameters:
+        - name: week_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Score list for week
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScoreSummary'
+  /scoreallweek:
+    get:
+      summary: Get all score rows across all weeks
+      responses:
+        '200':
+          description: All scores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScoreSummary'
+  /score/{class_id}:
+    delete:
+      summary: Delete score rows by class
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Scores deleted for class
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /scoreall:
+    delete:
+      summary: Delete all scores
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: All scores deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /score:
+    post:
+      summary: Bulk insert score rows
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScoreRequest'
+      responses:
+        '200':
+          description: Scores inserted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+    put:
+      summary: Update score value for a class/week
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScoreRequest'
+      responses:
+        '200':
+          description: Score updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+  /scorenote:
+    put:
+      summary: Update score note
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScoreNoteRequest'
+      responses:
+        '200':
+          description: Note updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+  /scoredef:
+    put:
+      summary: Update score default (deft)
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScoreDeftRequest'
+      responses:
+        '200':
+          description: Default score updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+  /vipham/{class_id}/{week_id}:
+    get:
+      summary: Get Vipham records for a class and week
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: week_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vipham records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ViphamSummary'
+  /vipham/{week_id}:
+    get:
+      summary: Get all Vipham records for a week
+      parameters:
+        - name: week_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vipham records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ViphamSummary'
+  /vipham:
+    post:
+      summary: Create a Vipham record
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      description: Protected route. Uses VIPHAM-specific authorization rules.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateViphamRequest'
+      responses:
+        '200':
+          description: Vipham created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+    put:
+      summary: Update a Vipham record
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      description: Protected route. Uses VIPHAM-specific authorization rules.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateViphamRequest'
+      responses:
+        '200':
+          description: Vipham updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+  /vipham/{vpm_id}:
+    delete:
+      summary: Delete a Vipham record
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: vpm_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Vipham deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /viphamall/{class_id}:
+    delete:
+      summary: Delete all Vipham records for a class
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vipham records deleted for class
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /viphamallclass:
+    delete:
+      summary: Delete all Vipham records across all classes
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: All Vipham records deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /student:
+    get:
+      summary: List all students
+      responses:
+        '200':
+          description: Student list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StudentSummary'
+    post:
+      summary: Create a student
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudentRequest'
+      responses:
+        '201':
+          description: Student created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/StudentSummary'
+    put:
+      summary: Update a student
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStudentRequest'
+      responses:
+        '200':
+          description: Student updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/StudentSummary'
+  /student/{student_id}:
+    get:
+      summary: Get a student by ID
+      parameters:
+        - name: student_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Student retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/StudentSummary'
+    delete:
+      summary: Delete a student
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: student_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Student deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /sodaubai/{class_id}/{week_id}:
+    get:
+      summary: Get SoDauBai records for a class and week
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: week_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SoDauBai records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SoDauBaiSummary'
+  /sodaubai/{week_id}:
+    get:
+      summary: Get SoDauBai records for a week
+      parameters:
+        - name: week_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SoDauBai records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SoDauBaiSummary'
+  /sodaubai:
+    post:
+      summary: Create a SoDauBai entry
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSoDauBaiRequest'
+      responses:
+        '200':
+          description: SoDauBai created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  insertId:
+                    type: integer
+  /sodaubai/{record_id}:
+    put:
+      summary: Update a SoDauBai entry
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: record_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSoDauBaiRequest'
+      responses:
+        '200':
+          description: SoDauBai updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  affectedRows:
+                    type: integer
+    delete:
+      summary: Delete a SoDauBai entry
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: record_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: SoDauBai deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  affectedRows:
+                    type: integer
+  /userall:
+    get:
+      summary: List all users (admin only)
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSummary'
+    delete:
+      summary: Delete all non-admin users
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Deleted non-admin users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /user:
+    get:
+      summary: List all non-admin users
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSummary'
+    post:
+      summary: Create a user
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+    put:
+      summary: Update a user (admin only)
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /user/me:
+    put:
+      summary: Update own user profile
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOwnProfileRequest'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /user/{user_id}:
+    get:
+      summary: Get a user by ID
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/UserSummary'
+    delete:
+      summary: Delete a user
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /user/{user_id}/reset-password:
+    post:
+      summary: Reset a user's password (admin only)
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Password reset
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  newPassword:
+                    type: string

@@ -36,8 +36,8 @@ async function createClass(classData) {
   return query('INSERT INTO Class SET ?', classData);
 }
 
-async function updateClass({ class_id, class_name, grade }) {
-  return query('UPDATE Class SET class_name = ?, grade = ? WHERE class_id = ?', [class_name, grade, class_id]);
+async function updateClass({ class_id, class_name, gvcn_id }) {
+  return query('UPDATE Class SET class_name = ?, gvcn_id = ? WHERE class_id = ?', [class_name, gvcn_id, class_id]);
 }
 
 module.exports = {

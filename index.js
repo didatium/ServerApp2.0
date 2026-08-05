@@ -33,13 +33,12 @@ const feedback = require('./routes/feedback.js');
 const lichtruc = require('./routes/lichtruc.js');
 const score = require('./routes/score.js');
 const vipham = require('./routes/vipham.js');
-const statisticOnDay = require('./routes/statisticOnDay.js');
 const student = require('./routes/student.js');
 const auth = require('./routes/auth.js');
 const sodaubai = require('./routes/sodaubai.js');
 const authMiddleware = require('./src/middleware/auth.middleware');
 
-//use Route - using route-level auth
+// use Route - using route-level auth
 app.use(auth);
 app.use(feedback);
 app.use(vipham);
@@ -50,7 +49,6 @@ app.use(rules);
 app.use(week);
 app.use(lichtruc);
 app.use(score);
-app.use(statisticOnDay);
 app.use(student);
 
 // Basic error handler
