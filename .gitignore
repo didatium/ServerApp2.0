@@ -3,3 +3,5 @@ dist/
 npm-debug.*.env
 .env
 .env.local
+scripts/
+migrations/

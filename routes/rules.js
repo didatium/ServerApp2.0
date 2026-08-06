@@ -3,7 +3,6 @@ const router = express.Router();
 const rulesController = require('../src/controllers/rulesController')
 const auth = require('../src/middleware/auth.middleware');
 const requireRole = require('../src/middleware/requireRole');
-const { route } = require("./rules");
 
 //get all
 router.get('/rules', rulesController.listRules)

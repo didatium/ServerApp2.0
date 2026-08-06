@@ -13,7 +13,8 @@ const pool = mysql.createPool({
   port: db.port,
   waitForConnections: db.waitForConnections,
   connectionLimit: db.connectionLimit,
-  queueLimit: db.queueLimit
+  queueLimit: db.queueLimit,
+  ssl: { rejectUnauthorized: false }
 });
 
 async function query(sql, params = []) {

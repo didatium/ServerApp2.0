@@ -25,7 +25,6 @@ const sdtSchema = Joi.string().trim().max(15);
 const addressSchema = Joi.string().trim().max(500);
 const feedSchema = Joi.string().trim().max(1000);
 const schoolSchema = Joi.string().trim().max(50);
-const studentIdSchema = Joi.string().trim().max(36);
 const studentNameSchema = Joi.string().trim().max(100);
 
 function validate(schema, payload) {
@@ -99,7 +98,7 @@ const createViphamSchema = Joi.object({
   class_id: idClassSchema.required(),
   name_vp_id: integerSchema.allow(null),
   quantity: integerSchema.required(),
-  student_id: studentIdSchema.allow(null),
+  student_id: integerSchema.allow(null),
   name_student: nameStudentSchema.allow(null),
   create_by: byWhoSchema.required(),
   bonus: bonusSchema.allow(null),
@@ -109,7 +108,7 @@ const createViphamSchema = Joi.object({
 const updateViphamSchema = Joi.object({
   name_vp_id: integerSchema,
   quantity: integerSchema,
-  student_id: studentIdSchema.allow(null),
+  student_id: integerSchema.allow(null),
   name_student: nameStudentSchema.allow(null),
   modified_by: modifiedBySchema.allow(null),
   bonus: bonusSchema.allow(null),
@@ -156,7 +155,7 @@ const updateFeedbackSchema = Joi.object({
 
 // Student
 const createStudentSchema = Joi.object({
-  student_id: studentIdSchema.allow(null),
+  student_id: integerSchema.allow(null),
   student_name: studentNameSchema.required(),
   class_id: idClassSchema.required()
 }).unknown(false);

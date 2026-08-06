@@ -1,6 +1,6 @@
 const { query } = require('../db/pool')
 
-async function getAllWeek() {
+async function getAllWeeks() {
     return query('SELECT * FROM Week')
 }
 
