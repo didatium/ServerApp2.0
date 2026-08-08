@@ -6,7 +6,7 @@ const idClassSchema = Joi.string().trim().max(8);
 const classNameSchema = Joi.string().trim().max(10);
 const userIdSchema = Joi.string().trim().max(6);
 const passwordSchema = Joi.string().trim().max(100);
-const userRoleSchema = Joi.string().trim().max(10);
+const userNameSchema = Joi.string().trim().max(10);
 const userClassSchema = Joi.string().trim().max(7);
 const roleSchema = Joi.string().trim().max(10);
 const gradeSchema = Joi.number().integer();
@@ -54,14 +54,14 @@ const updateClassSchema = Joi.object({
 const createUserSchema = Joi.object({
   user_id: userIdSchema.required(),
   password: passwordSchema.required(),
-  user_name: userRoleSchema.required(),
+  user_name: userNameSchema.required(),
   user_class: userClassSchema.allow(null),
   role: roleSchema.allow(null),
   grade_scope: gradeSchema.allow(null)
 }).unknown(false);
 const updateUserSchema = Joi.object({
   password: passwordSchema,
-  user_name: userRoleSchema,
+  user_name: userNameSchema,
   user_class: userClassSchema.allow(null),
   role: roleSchema.allow(null),
   grade_scope: gradeSchema.allow(null)
