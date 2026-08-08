@@ -1,4 +1,5 @@
 const { query } = require('../db/pool');
+const { randomUUID } = require('crypto');
 
 async function getAllStudents() {
   return query('SELECT * FROM Student');
@@ -9,8 +10,10 @@ async function getStudentById(studentId) {
   return rows[0] || null;
 }
 
-async function createStudent(studentData) {
-  return query('INSERT INTO Student SET ?', studentData);
+async function createStudent({ student_id, student_name, class_id }) {
+  const id = student_id || randomUUID();
+  await query('INSERT INTO Student (student_id, student_name, class_id) VALUES (?, ?, ?)', [id, student_name, class_id]);
+  return { student_id: id, student_name, class_id };
 }
 
 async function updateStudent({ student_id, student_name, class_id }) {

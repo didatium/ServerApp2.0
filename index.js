@@ -7,16 +7,13 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger-output.json');
-
 app.get('/', (req, res) => {
-  res.send('NO Hello World 3')
+  res.send('NO Hello World 2.5')
 })
 
 // Middleware kiểm tra API key
 function checkApiKey(req, res, next) {
-  const userApiKey = req.headers['api-key'] || req.query.apiKey; // Lấy API key từ phần header
+  const userApiKey = req.headers['api-key']; // Lấy API key từ phần header
 
   // Kiểm tra API key
   if (userApiKey && userApiKey === process.env.API_KEY) {
@@ -25,8 +22,6 @@ function checkApiKey(req, res, next) {
     res.status(401).json({ message: 'Unauthorized: Invalid API key' });
   }
 }
-
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(checkApiKey);
 
 //import Route

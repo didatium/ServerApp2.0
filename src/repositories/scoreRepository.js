@@ -19,7 +19,16 @@ async function deleteAll() {
 async function insertMany(scoreRows) {
   // scoreRows: array of arrays [[week_id, class_id, score, deft, note], ...]
   // Use bulk insert with VALUES ? parameter (mysql2 supports this)
-  return query('INSERT INTO Score VALUES ?', [scoreRows]);
+  const sql = `
+    INSERT INTO Score (week_id, class_id, score, deft, note) 
+    VALUES ? 
+    ON DUPLICATE KEY UPDATE 
+      score = VALUES(score), 
+      deft = VALUES(deft), 
+      note = VALUES(note)
+  `;
+  
+  return query(sql, [scoreRows]);
 }
 
 async function updateScore({ score, week_id, class_id }) {

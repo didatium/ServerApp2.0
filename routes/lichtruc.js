@@ -7,7 +7,7 @@ const auth = require('../src/middleware/auth.middleware');
 //get one week
 router.get('/lichtruc/:week_id', LichtrucController.listLichtrucByWeek)
 
-//post one (protected)
+//post many (protected)
 router.post('/lichtruc', auth, requireRole('admin'), LichtrucController.createLichtruc)
 
 //update one (protected)

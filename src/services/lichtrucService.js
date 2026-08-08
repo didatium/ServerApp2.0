@@ -5,7 +5,8 @@ async function listLichtrucByWeekId(weekId) {
 }
 
 async function createLichtruc(params) {
-    return LichtrucRepository.createLichtruc(params)
+    const rows = params.map(item => [item.week_id, item.class_active, item.class_passive])
+    return LichtrucRepository.createManyLichtruc(rows)
 }
 
 async function updateLichtruc(params) {

@@ -4,8 +4,15 @@ async function getLichtrucByWeekId(weekId) {
   return query('SELECT * FROM Lichtruc WHERE week_id = ?', [weekId]);
 }
 
-async function createLichtruc(params) {
-  return query('INSERT INTO Lichtruc SET ?', params);
+async function createManyLichtruc(params) {
+  // params: bulk insert
+  const sql = `
+    INSERT INTO Lichtruc (week_id, class_active, class_passive) 
+    VALUES ? 
+    ON DUPLICATE KEY UPDATE 
+      class_passive = VALUES(class_passive)
+  `;
+  return query(sql, [params]);
 }
 
 async function updateLichtruc({ class_active, class_passive, week_id }) {
@@ -18,7 +25,7 @@ async function deleteByClass(classId) {
 
 module.exports = {
     getLichtrucByWeekId,
-    createLichtruc,
+    createManyLichtruc,
     updateLichtruc,
     deleteByClass
 }

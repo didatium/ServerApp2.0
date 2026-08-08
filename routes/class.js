@@ -4,9 +4,6 @@ const classController = require('../src/controllers/classController');
 const auth = require('../src/middleware/auth.middleware');
 const requireRole = require('../src/middleware/requireRole');
 
-// Create new class table (protected)
-router.post('/newclass', auth, requireRole('admin'), classController.createClassTable);
-
 //get all (public)
 router.get('/class', classController.listClasses);
 

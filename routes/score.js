@@ -16,7 +16,7 @@ router.delete('/score/:class_id', auth, authorizeScore, scoreController.deleteBy
 //delete all (protected - admin only)
 router.delete('/scoreall', auth, requireRole('admin'), scoreController.deleteAll);
 
-//post one (protected)
+//post many (protected)
 router.post('/score', auth, authorizeScore, scoreController.createScores);
 
 //update one score (protected)

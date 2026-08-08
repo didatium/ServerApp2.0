@@ -1,9 +1,5 @@
 const classRepository = require('../repositories/classRepository');
 
-async function createClassTable(newClass) {
-  return classRepository.createClassTable(newClass);
-}
-
 async function listClasses() {
   return classRepository.getAllClasses();
 }
@@ -29,7 +25,6 @@ async function updateClass(classPayload) {
 }
 
 module.exports = {
-  createClassTable,
   listClasses,
   findClassById,
   removeClass,
