@@ -2,20 +2,6 @@ const { date } = require('joi');
 const classService = require('../services/classService');
 const { createClassValidator, updateClassValidator } = require("../utils/validators")
 
-async function createClassTable(req, res, next) {
-  try {
-    const { newClass } = req.body;
-    if (!newClass) {
-      return res.status(400).send('newClass is required');
-    }
-
-    await classService.createClassTable(newClass);
-    res.status(201).json({ success: true, message: 'Created new class!' });
-  } catch (error) {
-    next(error);
-  }
-}
-
 async function listClasses(req, res, next) {
   try {
     const classes = await classService.listClasses();
@@ -88,7 +74,6 @@ async function updateClass(req, res, next) {
 }
 
 module.exports = {
-  createClassTable,
   listClasses,
   getClass,
   deleteClass,

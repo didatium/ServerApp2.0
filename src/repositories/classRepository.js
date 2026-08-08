@@ -6,15 +6,6 @@ function validateTableName(name) {
   return /^[A-Za-z_][A-Za-z0-9_]*$/.test(name);
 }
 
-async function createClassTable(newClass) {
-  if (!validateTableName(newClass)) {
-    throw new Error('Invalid table name for new class');
-  }
-
-  const sql = 'CREATE TABLE IF NOT EXISTS `' + newClass + '` (`hs_id` varchar(6) PRIMARY KEY, `hs_name` varchar(100), `hs_vpm` varchar(1000))';
-  return query(sql);
-}
-
 async function getAllClasses() {
   return query('SELECT * FROM Class');
 }
@@ -41,7 +32,6 @@ async function updateClass({ class_id, class_name, gvcn_id }) {
 }
 
 module.exports = {
-  createClassTable,
   getAllClasses,
   getClassById,
   deleteClass,
