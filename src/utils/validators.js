@@ -46,7 +46,8 @@ const createClassSchema = Joi.object({
   grade: gradeSchema
 }).unknown(false);
 const updateClassSchema = Joi.object({
-  class_name: classNameSchema.required(),
+  class_id: idClassSchema.required(),
+  class_name: classNameSchema,
   grade: gradeSchema
 }).unknown(false);
 
@@ -60,6 +61,7 @@ const createUserSchema = Joi.object({
   grade_scope: gradeSchema.allow(null)
 }).unknown(false);
 const updateUserSchema = Joi.object({
+  user_id: userIdSchema.required(),  
   password: passwordSchema,
   user_name: userNameSchema,
   user_class: userClassSchema.allow(null),
@@ -75,7 +77,7 @@ const createWeekSchema = Joi.object({
   end_date: shortString25.allow(null)
 }).unknown(false);
 const updateWeekSchema = Joi.object({
-  week_name: weekNameSchema,
+  week_id: weekIdSchema.required(),
   start_date: shortString25.allow(null),
   end_date: shortString25.allow(null)
 }).unknown(false).min(1);
@@ -87,6 +89,7 @@ const createRulesSchema = Joi.object({
   type: ruleTypeSchema.allow(null)
 }).unknown(false);
 const updateRulesSchema = Joi.object({
+  name_vp_id: integerSchema.required(),
   name_vp: nameVpSchema,
   minus_pnt: minusPntSchema,
   type: ruleTypeSchema.allow(null)
@@ -106,6 +109,7 @@ const createViphamSchema = Joi.object({
   day: integerSchema.allow(null)
 }).unknown(false);
 const updateViphamSchema = Joi.object({
+  vpm_id: integerSchema.required(),
   name_vp_id: integerSchema,
   quantity: integerSchema,
   student_id: integerSchema.allow(null),
@@ -124,9 +128,11 @@ const createScoreSchema = Joi.object({
   note: Joi.string().allow(null)
 }).unknown(false);
 const updateScoreSchema = Joi.object({
+  week_id: weekIdSchema.required(),
+  class_id: idClassSchema.required(),
   score: integerSchema,
   deft: integerSchema,
-  note: Joi.string().allow(null)
+  note: Joi.string()
 }).unknown(false).min(1);
 
 // Lichtruc
@@ -136,6 +142,8 @@ const createLichTrucSchema = Joi.object({
   class_passive: idClassSchema.allow(null)
 }).unknown(false);
 const updateLichTrucSchema = Joi.object({
+  week_id: weekIdSchema.required(),
+  class_active: idClassSchema.required(),
   class_passive: idClassSchema.allow(null)
 }).unknown(false).min(1);
 
@@ -155,11 +163,11 @@ const updateFeedbackSchema = Joi.object({
 
 // Student
 const createStudentSchema = Joi.object({
-  student_id: integerSchema.allow(null),
   student_name: studentNameSchema.required(),
   class_id: idClassSchema.required()
 }).unknown(false);
 const updateStudentSchema = Joi.object({
+  student_id: integerSchema.required(),
   student_name: studentNameSchema,
   class_id: idClassSchema
 }).unknown(false).min(1);
