@@ -13,7 +13,7 @@ async function listLichtrucByWeek(req, res, next) {
 
 async function createLichtruc(req, res, next) {
     try {
-        const params = createLichTrucValidator(req.body)
+        const params = req.body
         const result = await LichtrucService.createLichtruc(params)
         res.status(201).json({ success: true, data: result })
     } catch (error) {
@@ -23,7 +23,7 @@ async function createLichtruc(req, res, next) {
 
 async function updateLichtruc(req, res, next) {
     try {
-        const params = updateLichTrucValidator(req.body)
+        const params = req.body
         const result = await LichtrucService.updateLichtruc(params)
         res.status(200).json({ success: true, data: result })
     } catch (error) {

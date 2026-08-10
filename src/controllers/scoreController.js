@@ -44,7 +44,7 @@ async function deleteAll(req, res, next) {
 
 async function createScores(req, res, next) {
   try {
-    const params = createScoreValidator(req.body);
+    const params = req.body;
     const created = await scoreService.createScores(params);
     res.status(201).json({ success: true, data: created });
   } catch (err) {
@@ -54,7 +54,7 @@ async function createScores(req, res, next) {
 
 async function updateScore(req, res, next) {
   try {
-    const { score, week_id, class_id } = updateScoreValidator(req.body);
+    const { score, week_id, class_id } = req.body;
     const updated = await scoreService.updateScore({ score, week_id, class_id });
     res.status(200).json({ success: true, data: updated });
   } catch (err) {
@@ -64,7 +64,7 @@ async function updateScore(req, res, next) {
 
 async function updateNote(req, res, next) {
   try {
-    const { note, week_id, class_id } = updateScoreValidator(req.body);
+    const { note, week_id, class_id } = req.body;
     const updated = await scoreService.updateNote({ note, week_id, class_id });
     res.status(200).json({ success: true, data: updated });
   } catch (err) {
@@ -74,7 +74,7 @@ async function updateNote(req, res, next) {
 
 async function updateDeft(req, res, next) {
   try {
-    const { deft, week_id, class_id } = updateScoreValidator(req.body);
+    const { deft, week_id, class_id } = req.body;
     const updated = await scoreService.updateDeft({ deft, week_id, class_id });
     res.status(200).json({ success: true, data: updated });
   } catch (err) {
