@@ -1,4 +1,4 @@
-const { query } = require('../db/pool');
+const { query, pool } = require('../db/pool');
 
 async function findByWeek(weekId) {
   return query('SELECT * FROM Score WHERE week_id = ?', [weekId]);
@@ -28,7 +28,7 @@ async function insertMany(scoreRows) {
       note = VALUES(note)
   `;
   
-  return query(sql, [scoreRows]);
+  return pool.query(sql, [scoreRows]);
 }
 
 async function updateScore({ score, week_id, class_id }) {

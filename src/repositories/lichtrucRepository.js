@@ -1,4 +1,4 @@
-const { query } = require('../db/pool')
+const { query, pool } = require('../db/pool')
 
 async function getLichtrucByWeekId(weekId) {
   return query('SELECT * FROM Lichtruc WHERE week_id = ?', [weekId]);
@@ -12,7 +12,7 @@ async function createManyLichtruc(params) {
     ON DUPLICATE KEY UPDATE 
       class_passive = VALUES(class_passive)
   `;
-  return query(sql, [params]);
+  return pool.query(sql, [params]);
 }
 
 async function updateLichtruc({ class_active, class_passive, week_id }) {
