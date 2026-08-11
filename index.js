@@ -2,6 +2,7 @@ var express = require('express');
 var cors = require('cors')
 var bodyparser = require('body-parser')
 var app = express();
+var { testConnection } = require('./src/db/pool.js')
 
 app.use(cors());
 app.use(bodyparser.json());
@@ -11,7 +12,13 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 
 app.get('/', (req, res) => {
-  res.send('NO Hello World 3')
+  try {
+    await testConnection()
+    res.status(200).send('NO Hello World 3.1')
+  } catch (error) {
+    console.error('Ping DB thất bại:', error.message);
+    res.status(500).send('Database connection error');
+  }
 })
 
 // Middleware kiểm tra API key
