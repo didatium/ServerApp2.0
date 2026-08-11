@@ -56,7 +56,7 @@ async function resetPassword(req, res, next) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, data: newPassword });
   } catch (err) {
     next(err);
   }

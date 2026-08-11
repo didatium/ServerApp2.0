@@ -14,7 +14,7 @@ router.get('/user', auth, requireRole('admin'), userController.listUsersExceptAd
 router.get('/user/:user_id', auth, requireRole('admin'), userController.getUser);
 
 //reset password (admin only)
-router.post('/user/:user_id/reset-password', auth, requireRole('admin'), userController.resetPassword);
+router.put('/user/:user_id/reset-password', auth, requireRole('admin'), userController.resetPassword);
 
 //delete one (protected)
 router.delete('/user/:user_id', auth, requireRole('admin'), userController.deleteUser);
