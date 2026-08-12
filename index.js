@@ -11,7 +11,7 @@ app.use(bodyparser.urlencoded({ extended: false }));
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   try {
     await testConnection()
     res.status(200).send('NO Hello World 3.1')
