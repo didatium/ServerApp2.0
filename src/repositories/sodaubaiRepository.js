@@ -31,6 +31,10 @@ async function deleteAll() {
   return query('DELETE FROM SoDauBai');
 }
 
+async function deleteByClassId(classId) {
+  return query('DELETE FROM SoDauBai WHERE class_id = ?', [classId]);
+}
+
 module.exports = {
   findByClassAndWeek,
   findByWeek,
@@ -38,5 +42,6 @@ module.exports = {
   insertSoDauBai,
   updateById,
   deleteById,
-  deleteAll
+  deleteAll,
+  deleteByClassId
 };

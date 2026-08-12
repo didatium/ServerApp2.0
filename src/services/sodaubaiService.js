@@ -24,6 +24,10 @@ async function removeSoDauBai(recordId) {
   return sodaubaiRepository.deleteById(recordId);
 }
 
+async function removeSoDauBaiByClass(classId) {
+  return sodaubaiRepository.deleteByClassId(classId);
+}
+
 async function removeAllSoDauBai() {
   return sodaubaiRepository.deleteAll()
 }
@@ -35,5 +39,6 @@ module.exports = {
   createSoDauBai,
   updateSoDauBai,
   removeSoDauBai,
-  removeAllSoDauBai
+  removeAllSoDauBai,
+  removeSoDauBaiByClass
 };
