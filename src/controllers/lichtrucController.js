@@ -41,9 +41,19 @@ async function deleteLichtrucByClass(req, res, next) {
     }
 }
 
+async function deleteAll(req, res, next) {
+  try {
+    await LichtrucService.deleteAllLichtruc();
+    res.status(200).json({ success: true, message: 'Deleted all lich truc!' });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
     listLichtrucByWeek,
     createLichtruc,
     updateLichtruc,
-    deleteLichtrucByClass
+    deleteLichtrucByClass,
+    deleteAll
 }

@@ -16,4 +16,7 @@ router.put('/lichtruc', auth, requireRole('admin'), LichtrucController.updateLic
 // delete one (protected)
 router.delete('/lichtruc/:class_active', auth, requireRole('admin'), LichtrucController.deleteLichtrucByClass)
 
+// delete all
+router.delete('/lichtrucall', auth, requireRole('admin'), LichtrucController.deleteAll)
+
 module.exports = router;

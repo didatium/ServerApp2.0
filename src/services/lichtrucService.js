@@ -17,9 +17,14 @@ async function deleteLichtrucByClass(classId) {
     return LichtrucRepository.deleteByClass(classId)
 }
 
+async function deleteAllLichtruc() {
+    return LichtrucRepository.deleteAllLichtruc()
+}
+
 module.exports = {
     listLichtrucByWeekId,
     createLichtruc,
     updateLichtruc,
-    deleteLichtrucByClass
+    deleteLichtrucByClass,
+    deleteAllLichtruc
 }

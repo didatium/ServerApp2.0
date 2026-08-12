@@ -23,9 +23,14 @@ async function deleteByClass(classId) {
     return query('DELETE FROM Lichtruc WHERE class_active = ?', [classId])
 }
 
+async function deleteAllLichtruc() {
+  return query('DELETE FROM Lichtruc');
+}
+
 module.exports = {
     getLichtrucByWeekId,
     createManyLichtruc,
     updateLichtruc,
-    deleteByClass
+    deleteByClass,
+    deleteAllLichtruc
 }
