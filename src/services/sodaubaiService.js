@@ -24,11 +24,16 @@ async function removeSoDauBai(recordId) {
   return sodaubaiRepository.deleteById(recordId);
 }
 
+async function removeAllSoDauBai() {
+  return sodaubaiRepository.deleteAll()
+}
+
 module.exports = {
   listByClassAndWeek,
   listByWeek,
   getById,
   createSoDauBai,
   updateSoDauBai,
-  removeSoDauBai
+  removeSoDauBai,
+  removeAllSoDauBai
 };

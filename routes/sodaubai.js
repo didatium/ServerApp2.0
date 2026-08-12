@@ -3,6 +3,7 @@ const router = express.Router();
 const sodaubaiController = require('../src/controllers/sodaubaiController');
 const auth = require('../src/middleware/auth.middleware');
 const authorizeSoDauBai = require('../middlewares/authorizeSoDauBai');
+const requireRole = require('../src/middleware/requireRole');
 
 // public reads
 router.get('/sodaubai/:class_id/:week_id', sodaubaiController.getByClassAndWeek);
@@ -16,5 +17,8 @@ router.put('/sodaubai/:record_id', auth, authorizeSoDauBai, sodaubaiController.u
 
 // delete by record_id (protected)
 router.delete('/sodaubai/:record_id', auth, authorizeSoDauBai, sodaubaiController.deleteSoDauBai);
+
+// delete all
+router.delete('/sodaubaiall', auth, requireRole('admin'), sodaubaiController.deleteAll);
 
 module.exports = router;

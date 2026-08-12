@@ -55,10 +55,20 @@ async function deleteSoDauBai(req, res, next) {
   }
 }
 
+async function deleteAll(req, res, next) {
+  try {
+    await sodaubaiService.removeAllSoDauBai()
+    res.status(200).json({ success: true, message: 'Deleted all so dau bai!' });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getByClassAndWeek,
   getByWeek,
   createSoDauBai,
   updateSoDauBai,
-  deleteSoDauBai
+  deleteSoDauBai,
+  deleteAll
 };
