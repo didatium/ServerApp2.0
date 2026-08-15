@@ -8,6 +8,9 @@ router.get('/vipham/:class_id/:week_id', viphamController.getByClassAndWeek);
 //get one week
 router.get('/vipham/:week_id', viphamController.getByWeek);
 
+//get one class
+router.get('/vipham/:class_id', viphamController.getByClass);
+
 const auth = require('../src/middleware/auth.middleware');
 const authorizeVipham = require('../middlewares/authorizeVipham');
 const requireRole = require('../src/middleware/requireRole');

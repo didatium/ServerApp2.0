@@ -8,6 +8,10 @@ async function listByWeek(weekId) {
   return viphamRepository.findByWeek(weekId);
 }
 
+async function listByClass(classId) {
+  return viphamRepository.findByClass(classId);
+}
+
 async function getById(vpmId) {
   return viphamRepository.findById(vpmId);
 }
@@ -39,6 +43,7 @@ async function updateVipham(payload) {
 module.exports = {
   listByClassAndWeek,
   listByWeek,
+  listByClass,
   getById,
   removeById,
   removeByClass,

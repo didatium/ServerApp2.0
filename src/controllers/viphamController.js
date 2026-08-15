@@ -21,6 +21,16 @@ async function getByWeek(req, res, next) {
   }
 }
 
+async function getByClass(req, res, next) {
+  try {
+    const { class_id } = req.params;
+    const rows = await viphamService.listByClass(class_id);
+    res.status(200).json({ success: true, data: rows });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function deleteById(req, res, next) {
   try {
     const { vpm_id } = req.params;
@@ -76,6 +86,7 @@ async function updateVipham(req, res, next) {
 module.exports = {
   getByClassAndWeek,
   getByWeek,
+  getByClass,
   deleteById,
   deleteByClass,
   deleteAll,
