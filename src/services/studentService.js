@@ -9,7 +9,7 @@ async function findStudentById(studentId) {
 }
 
 async function findStudentByClassId(classId) {
-  return studentRepository.getStudentByClassId(classId);
+  return studentRepository.getStudentsByClassId(classId);
 }
 
 async function createStudent(studentPayload) {
