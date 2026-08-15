@@ -6,10 +6,10 @@ const viphamController = require('../src/controllers/viphamController');
 router.get('/vipham/:class_id/:week_id', viphamController.getByClassAndWeek);
 
 //get one week
-router.get('/vipham/:week_id', viphamController.getByWeek);
+router.get('/vipham/week/:week_id', viphamController.getByWeek);
 
 //get one class
-router.get('/vipham/:class_id', viphamController.getByClass);
+router.get('/vipham/class/:class_id', viphamController.getByClass);
 
 const auth = require('../src/middleware/auth.middleware');
 const authorizeVipham = require('../middlewares/authorizeVipham');
