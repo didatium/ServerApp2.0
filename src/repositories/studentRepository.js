@@ -9,6 +9,14 @@ async function getStudentById(studentId) {
   return rows[0] || null;
 }
 
+async function getStudentsByClassId(class_id) {
+  return query(
+    `SELECT student_id, student_name FROM Student WHERE class_id = ?
+     ORDER BY student_name ASC`,
+    [class_id]
+  );
+}
+
 async function createStudent(studentData) {
   return query('INSERT INTO Student SET ?', studentData);
 }

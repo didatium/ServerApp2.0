@@ -8,6 +8,10 @@ async function findStudentById(studentId) {
   return studentRepository.getStudentById(studentId);
 }
 
+async function findStudentByClassId(classId) {
+  return studentRepository.getStudentByClassId(classId);
+}
+
 async function createStudent(studentPayload) {
   return studentRepository.createStudent(studentPayload);
 }
@@ -23,6 +27,7 @@ async function removeStudent(studentId) {
 module.exports = {
   listStudents,
   findStudentById,
+  findStudentByClassId,
   createStudent,
   updateStudent,
   removeStudent

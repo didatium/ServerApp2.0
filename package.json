@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "swagger": "node swagger.js"
   },
   "keywords": [],
@@ -31,6 +31,7 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
+    "nodemon": "^3.1.14",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
   }

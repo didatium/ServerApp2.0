@@ -31,7 +31,7 @@ async function createVipham(params) {
 async function updateVipham(payload) {
   // business logic: if bonus == null update fields else update bonus
   if (payload.bonus == null) {
-    return viphamRepository.updateViphamFields(payload);
+    return viphamRepository.updateVipham(payload);
   }
   return viphamRepository.updateViphamBonus(payload);
 }

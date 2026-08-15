@@ -23,6 +23,19 @@ async function getStudent(req, res, next) {
   }
 }
 
+async function getByClass(req, res, next) {
+  try {
+    const { class_id } = req.params;
+    const student = await studentService.findStudentByClassId(class_id);
+    if (!student) {
+      return res.status(404).json({ success: false, message: 'Student not found' });
+    }
+    res.status(200).json({ success: true, data: student });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function createStudent(req, res, next) {
   try {
     const payload = createStudentValidator(req.body);
@@ -62,6 +75,7 @@ async function deleteStudent(req, res, next) {
 module.exports = {
   listStudents,
   getStudent,
+  getByClass,
   createStudent,
   updateStudent,
   deleteStudent
