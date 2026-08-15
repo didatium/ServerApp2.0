@@ -38,7 +38,7 @@ async function getByClass(req, res, next) {
 
 async function createStudent(req, res, next) {
   try {
-    const payload = createStudentValidator(req.body);
+    const payload = req.body;
     const student = await studentService.createStudent(payload);
     res.status(201).json({ success: true, data: student });
   } catch (error) {
@@ -48,7 +48,7 @@ async function createStudent(req, res, next) {
 
 async function updateStudent(req, res, next) {
   try {
-    const params = updateStudentValidator(req.body);
+    const params = req.body;
     const student = await studentService.updateStudent(params);
     if (!student) {
       return res.status(404).json({ success: false, message: 'Student not found' });
