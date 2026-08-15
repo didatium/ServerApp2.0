@@ -65,7 +65,7 @@ async function deleteAll(req, res, next) {
 
 async function createVipham(req, res, next) {
   try {
-    const params = createViphamValidator(req.body);
+    const params = req.body;
     const vipham = await viphamService.createVipham(params);
     res.status(201).json({ success: true, data: vipham });
   } catch (err) {
@@ -75,7 +75,7 @@ async function createVipham(req, res, next) {
 
 async function updateVipham(req, res, next) {
   try {
-    const payload = updateViphamValidator(req.body);
+    const payload = req.body;
     const result = await viphamService.updateVipham(payload);
     res.status(200).json({ success: true, data: result })
   } catch (err) {
