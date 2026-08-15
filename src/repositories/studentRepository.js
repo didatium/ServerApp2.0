@@ -10,10 +10,19 @@ async function getStudentById(studentId) {
 }
 
 async function getStudentsByClassId(class_id) {
-  return query(
-    `SELECT student_id, student_name FROM Student WHERE class_id = ?`,
-    [class_id]
-  );
+  const sql = `
+    SELECT 
+      s.student_id,
+      s.student_name,
+      c.class_id,
+      c.class_name,
+      c.grade
+    FROM Student s
+    INNER JOIN Class c ON s.class_id = c.class_id
+    WHERE s.class_id = ?
+    ORDER BY c.grade ASC, c.class_name ASC, s.student_id ASC;
+  `
+  return query(sql, [class_id]);
 }
 
 async function createStudent(studentData) {
