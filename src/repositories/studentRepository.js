@@ -11,8 +11,7 @@ async function getStudentById(studentId) {
 
 async function getStudentsByClassId(class_id) {
   return query(
-    `SELECT student_id, student_name FROM Student WHERE class_id = ?
-     ORDER BY student_name ASC`,
+    `SELECT student_id, student_name FROM Student WHERE class_id = ?`,
     [class_id]
   );
 }
@@ -55,6 +54,7 @@ async function deleteStudent(studentId) {
 module.exports = {
   getAllStudents,
   getStudentById,
+  getStudentsByClassId,
   createStudent,
   updateStudent,
   deleteStudent
