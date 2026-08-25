@@ -4,20 +4,24 @@ async function findByClassAndWeek(class_id, week_id) {
   const rows = await query(
     `SELECT
        v.*,
+       r.name_vp,
        JSON_ARRAYAGG(
          CASE WHEN s.student_id IS NOT NULL
            THEN JSON_OBJECT(
              'student_id', s.student_id,
-             'student_name', s.student_name
+             'student_name', s.student_name,
+             'gioi_tinh', s.gioi_tinh,
+             'ngay_sinh', s.ngay_sinh
            )
            ELSE NULL
          END
        ) AS students
      FROM Vipham v
+     LEFT JOIN Rules r ON v.name_vp_id = r.name_vp_id
      LEFT JOIN ViphamStudent vs ON v.vpm_id = vs.vpm_id
      LEFT JOIN Student s ON vs.student_id = s.student_id
      WHERE v.class_id = ? AND v.week_id = ?
-     GROUP BY v.vpm_id`,
+     GROUP BY v.vpm_id, r.name_vp`,
     [class_id, week_id]
   );
   // Lọc NULL ra khỏi mảng students (LEFT JOIN trả NULL khi không có học sinh)
@@ -31,22 +35,27 @@ async function findByWeek(weekId) {
   const rows = await query(
     `SELECT
        v.*,
+       r.name_vp,
        JSON_ARRAYAGG(
          CASE WHEN s.student_id IS NOT NULL
            THEN JSON_OBJECT(
              'student_id', s.student_id,
-             'student_name', s.student_name
+             'student_name', s.student_name,
+             'gioi_tinh', s.gioi_tinh,
+             'ngay_sinh', s.ngay_sinh
            )
            ELSE NULL
          END
        ) AS students
      FROM Vipham v
+     LEFT JOIN Rules r ON v.name_vp_id = r.name_vp_id
      LEFT JOIN ViphamStudent vs ON v.vpm_id = vs.vpm_id
      LEFT JOIN Student s ON vs.student_id = s.student_id
      WHERE v.week_id = ?
-     GROUP BY v.vpm_id`,
+     GROUP BY v.vpm_id, r.name_vp`,
     [weekId]
   );
+  
   // Lọc NULL ra khỏi mảng students (LEFT JOIN trả NULL khi không có học sinh)
   return rows.map(row => ({
     ...row,
@@ -58,20 +67,24 @@ async function findByClass(classId) {
   const rows = await query(
     `SELECT
        v.*,
+       r.name_vp,
        JSON_ARRAYAGG(
          CASE WHEN s.student_id IS NOT NULL
            THEN JSON_OBJECT(
              'student_id', s.student_id,
-             'student_name', s.student_name
+             'student_name', s.student_name,
+             'gioi_tinh', s.gioi_tinh,
+             'ngay_sinh', s.ngay_sinh
            )
            ELSE NULL
          END
        ) AS students
      FROM Vipham v
+     LEFT JOIN Rules r ON v.name_vp_id = r.name_vp_id
      LEFT JOIN ViphamStudent vs ON v.vpm_id = vs.vpm_id
      LEFT JOIN Student s ON vs.student_id = s.student_id
      WHERE v.class_id = ?
-     GROUP BY v.vpm_id`,
+     GROUP BY v.vpm_id, r.name_vp`,
     [classId]
   );
   // Lọc NULL ra khỏi mảng students (LEFT JOIN trả NULL khi không có học sinh)
@@ -79,6 +92,7 @@ async function findByClass(classId) {
     ...row,
     students: (row.students ?? []).filter(Boolean),
   }));
+  // return rows;
 }
 
 async function findById(vpmId) {
@@ -113,7 +127,7 @@ async function createVipham({ week_id, class_id, name_vp_id, quantity,
 
     if (student_ids.length > 0) {
       const rows = student_ids.map(sid => [vpm_id, sid]);
-      await conn.execute(
+      await conn.query(
         `INSERT INTO ViphamStudent (vpm_id, student_id) VALUES ?`,
         [rows]
       );
@@ -160,6 +174,10 @@ async function updateVipham({ vpm_id, name_vp_id, quantity,
   }
 }
 
+async function createViphamBonus(payload) {
+  return query('INSERT INTO Vipham SET ?', [payload]);
+}
+
 async function updateViphamBonus({ vpm_id, bonus, quantity, create_by, day }) {
   return query('UPDATE Vipham SET bonus = ?, quantity = ?, create_by = ?, day = ? WHERE vpm_id = ?', [bonus, quantity, create_by, day, vpm_id]);
 }
@@ -174,5 +192,6 @@ module.exports = {
   deleteAll,
   createVipham,
   updateVipham,
-  updateViphamBonus
+  createViphamBonus,
+  updateViphamBonus,
 };

@@ -14,6 +14,8 @@ async function getStudentsByClassId(class_id) {
     SELECT 
       s.student_id,
       s.student_name,
+      s.gioi_tinh,
+      s.ngay_sinh,
       c.class_id,
       c.class_name,
       c.grade

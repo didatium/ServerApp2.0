@@ -7,7 +7,7 @@ const requireRole = require('../src/middleware/requireRole');
 
 // public reads
 router.get('/sodaubai/:class_id/:week_id', sodaubaiController.getByClassAndWeek);
-router.get('/sodaubai/:week_id', sodaubaiController.getByWeek);
+router.get('/sodaubaiweek/:week_id', sodaubaiController.getByWeek);
 
 // create (protected)
 router.post('/sodaubai', auth, authorizeSoDauBai, sodaubaiController.createSoDauBai);

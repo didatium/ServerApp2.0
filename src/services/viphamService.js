@@ -29,7 +29,10 @@ async function removeAll() {
 }
 
 async function createVipham(params) {
-  return viphamRepository.createVipham(params);
+  if(params.bonus == null) {
+    return viphamRepository.createVipham(params);
+  }
+  return viphamRepository.createViphamBonus(params)
 }
 
 async function updateVipham(payload) {

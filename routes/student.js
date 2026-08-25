@@ -6,7 +6,7 @@ const auth = require('../src/middleware/auth.middleware');
 
 router.get('/student', studentController.listStudents);
 router.get('/student/:student_id', studentController.getStudent);
-router.get('/student/class/:class_id', studentController.getByClass);
+router.get('/studentclass/:class_id', studentController.getByClass);
 router.post('/student', auth, requireRole('admin'), studentController.createStudent);
 router.put('/student', auth, requireRole('admin'), studentController.updateStudent);
 router.delete('/student/:student_id', auth, requireRole('admin'), studentController.deleteStudent);
