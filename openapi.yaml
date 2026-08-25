@@ -5,6 +5,7 @@ info:
   description: |
     API contract for the CMM backend. Frontend clients must include the API key header `api-key` on every request.
     Protected endpoints also require JWT bearer authentication with the token returned by `/login`.
+  x-generatedAt: "2026-08-25T23:08:54.926+07:00"
 servers:
   - url: http://localhost:3000
 security:
