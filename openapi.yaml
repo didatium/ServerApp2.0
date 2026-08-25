@@ -601,36 +601,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
     security:
       - ApiKeyAuth: []
-  /newclass:
-    post:
-      summary: Create a new class table by dynamic name
-      description: Protected admin-only route that creates a new per-class table. Use with caution.
-      security:
-        - ApiKeyAuth: []
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - newClass
-              properties:
-                newClass:
-                  type: string
-      responses:
-        '201':
-          description: Created new class table
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
   /class:
     get:
       summary: List all classes
@@ -1026,6 +996,24 @@ paths:
                     type: boolean
                   message:
                     type: string
+  /lichtrucall:
+    delete:
+      summary: Delete all duty assignments
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Deleted all duty assignments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
   /score/{week_id}:
     get:
       summary: Get score by week
@@ -1208,7 +1196,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ViphamSummary'
-  /vipham/{week_id}:
+  /viphamweek/{week_id}:
     get:
       summary: Get all Vipham records for a week
       parameters:
@@ -1220,6 +1208,24 @@ paths:
       responses:
         '200':
           description: Vipham records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ViphamSummary'
+  /viphamclass/{class_id}:
+    get:
+      summary: Get all Vipham records for a class
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vipham records by class
           content:
             application/json:
               schema:
@@ -1444,6 +1450,24 @@ paths:
                     type: boolean
                   message:
                     type: string
+  /studentclass/{class_id}:
+    get:
+      summary: List students for a class
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Students for class
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentSummary'
   /sodaubai/{class_id}/{week_id}:
     get:
       summary: Get SoDauBai records for a class and week
@@ -1467,7 +1491,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SoDauBaiSummary'
-  /sodaubai/{week_id}:
+  /sodaubaiweek/{week_id}:
     get:
       summary: Get SoDauBai records for a week
       parameters:
@@ -1562,6 +1586,48 @@ paths:
                     type: boolean
                   affectedRows:
                     type: integer
+  /sodaubai/{class_id}:
+    delete:
+      summary: Delete SoDauBai entries for a class
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SoDauBai records deleted for class
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /sodaubaiall:
+    delete:
+      summary: Delete all SoDauBai records
+      security:
+        - ApiKeyAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: All SoDauBai records deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
   /userall:
     get:
       summary: List all users (admin only)
