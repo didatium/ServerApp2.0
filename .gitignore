@@ -5,3 +5,5 @@ npm-debug.*.env
 .env.local
 scripts/
 migrations/
+BACKEND_API_SUMMARY.md
+README-ADMIN-CONTEXT.md

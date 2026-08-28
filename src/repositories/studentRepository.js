@@ -54,7 +54,7 @@ async function updateStudent({ student_id, student_name, class_id }) {
   if (result.affectedRows === 0) {
     return null;
   }
-  return getStudentById(studentId);
+  return getStudentById(student_id);
 }
 
 async function deleteStudent(studentId) {
