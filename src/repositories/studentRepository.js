@@ -31,7 +31,7 @@ async function createStudent(studentData) {
   return query('INSERT INTO Student SET ?', studentData);
 }
 
-async function updateStudent({ student_id, student_name, class_id }) {
+async function updateStudent({ student_id, student_name, class_id, gioi_tinh, ngay_sinh }) {
   const updates = [];
   const params = [];
 
@@ -43,12 +43,19 @@ async function updateStudent({ student_id, student_name, class_id }) {
     updates.push('class_id = ?');
     params.push(class_id);
   }
-
+  if (gioi_tinh != null) {
+    updates.push('gioi_tinh = ?');
+    params.push(gioi_tinh);
+  }
+  if (ngay_sinh != null) {
+    updates.push('ngay_sinh = ?');
+    params.push(ngay_sinh);
+  }
   if (updates.length === 0) {
     return getStudentById(student_id);
   }
-
   params.push(student_id);
+  
   const sql = `UPDATE Student SET ${updates.join(', ')} WHERE student_id = ?`;
   const result = await query(sql, params);
   if (result.affectedRows === 0) {
